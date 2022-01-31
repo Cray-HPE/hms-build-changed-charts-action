@@ -1,0 +1,23 @@
+name: Build changed Helm charts
+description: Build any Helm charts that have been modified when compared to the master branch
+inputs:
+  target-branch:
+      description: Git repository branch to check against when determining charts that have changed.
+      required: true
+      default: "master"
+  unstable-build-suffix:
+      description: |
+        The unstable build suffix is appended to the chart version for unstable builds.
+        If the unstable build suffix is the empty string, then a stable build is performed.
+      required: false
+      default: ""
+
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
+  env:
+      UNSTABLE_BUILD_SUFFIX: ${{ inputs.unstable-build-suffix }}
+  args:
+    - /bin/bash
+    - -c
+    - update-ct-config-with-chart-dirs.sh charts; build_changed_charts.sh ./charts ${{ inputs.target-branch }}
