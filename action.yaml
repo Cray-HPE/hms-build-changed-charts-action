@@ -20,4 +20,4 @@ runs:
   args:
     - /bin/bash
     - -c
-    - update-ct-config-with-chart-dirs.sh charts; build_changed_charts.sh ./charts ${{ inputs.target-branch }}
+    - git config --global --add safe.directory /github/workspace; update-ct-config-with-chart-dirs.sh charts; build_changed_charts.sh ./charts ${{ inputs.target-branch }}
