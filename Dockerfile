@@ -20,7 +20,7 @@
 # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 # OTHER DEALINGS IN THE SOFTWARE.
 
-FROM artifactory.algol60.net/csm-docker/stable/hms-build-environment:1.0.0
+FROM artifactory.algol60.net/csm-docker/stable/hms-build-environment:1.1.0
 
 COPY ./scripts/ /usr/local/bin/
 WORKDIR /workspace
