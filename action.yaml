@@ -27,8 +27,14 @@ runs:
       uses: helm/chart-testing-action@v2
       with:
         version: v3.4.0
-    - name: Build changed Helm charts
+
+    - name: Update chart-testing configuration with chart dirs
       shell: bash
       run: | 
         $GITHUB_ACTION_PATH/scripts/update-ct-config-with-chart-dirs.sh charts
+        cat ct.yaml
+
+    - name: Build changed Helm charts
+      shell: bash
+      run: | 
         $GITHUB_ACTION_PATH/scripts/build_changed_charts.sh ./charts ${{ inputs.target-branch }}
