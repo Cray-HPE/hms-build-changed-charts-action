@@ -13,27 +13,37 @@ inputs:
       default: ""
 
 runs:
-  using: composite
-  steps:
-    - name: Setup python
-      uses: actions/setup-python@v4
-      with:
-        python-version: "3.10"
-    - name: Setup helm
-      uses: azure/setup-helm@v3
-      with:
-        version: v3.10.2
-    - name: Setup chart-testing
-      uses: helm/chart-testing-action@v2
-      with:
-        version: v3.4.0
+  using: 'docker'
+  image: 'Dockerfile'
+  env:
+      UNSTABLE_BUILD_SUFFIX: ${{ inputs.unstable-build-suffix }}
+  args:
+    - /bin/bash
+    - -c
+    - git config --global --add safe.directory /github/workspace; update-ct-config-with-chart-dirs.sh charts; build_changed_charts.sh ./charts ${{ inputs.target-branch }}
 
-    - name: Update chart-testing configuration with chart dirs
-      shell: bash
-      run: | 
-        $GITHUB_ACTION_PATH/scripts/update-ct-config-with-chart-dirs.sh charts
+# runs:
+#   using: composite
+#   steps:
+#     - name: Setup python
+#       uses: actions/setup-python@v4
+#       with:
+#         python-version: "3.10"
+#     - name: Setup helm
+#       uses: azure/setup-helm@v3
+#       with:
+#         version: v3.10.2
+#     - name: Setup chart-testing
+#       uses: helm/chart-testing-action@v2
+#       with:
+#         version: v3.4.0
 
-    - name: Build changed Helm charts
-      shell: bash
-      run: | 
-        $GITHUB_ACTION_PATH/scripts/build_changed_charts.sh ./charts ${{ inputs.target-branch }}
+#     - name: Update chart-testing configuration with chart dirs
+#       shell: bash
+#       run: | 
+#         $GITHUB_ACTION_PATH/scripts/update-ct-config-with-chart-dirs.sh charts
+
+#     - name: Build changed Helm charts
+#       shell: bash
+#       run: | 
+#         $GITHUB_ACTION_PATH/scripts/build_changed_charts.sh ./charts ${{ inputs.target-branch }}
