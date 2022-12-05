@@ -25,7 +25,8 @@ runs:
         version: v3.10.2
     - name: Setup chart-testing
       uses: helm/chart-testing-action@v2
-
+      with:
+        version: v3.4.0
     - name: Build changed Helm charts
       shell: bash
       run: | 
