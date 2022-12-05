@@ -32,7 +32,6 @@ runs:
       shell: bash
       run: | 
         $GITHUB_ACTION_PATH/scripts/update-ct-config-with-chart-dirs.sh charts
-        cat ct.yaml
 
     - name: Build changed Helm charts
       shell: bash
