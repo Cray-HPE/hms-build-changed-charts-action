@@ -29,5 +29,5 @@ runs:
     - name: Build changed Helm charts
       shell: bash
       run: | 
-        update-ct-config-with-chart-dirs.sh charts
-        build_changed_charts.sh ./charts ${{ inputs.target-branch }}
+        ./update-ct-config-with-chart-dirs.sh charts
+        ./build_changed_charts.sh ./charts ${{ inputs.target-branch }}
