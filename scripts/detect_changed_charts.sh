@@ -57,7 +57,6 @@ if [[ "$CURRENT_BRANCH" == "$TARGET_BRANCH" ]]; then
 else
     # Second identify any charts that have changed between this branch and the target branch
     echo "Using chart testing to determine changed charts" 1>&2
-    pwd 1>&2
     CHANGED_CHARTS=$(ct list-changed --config ct.yaml --target-branch "$TARGET_BRANCH")
 fi
 

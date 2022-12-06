@@ -38,18 +38,12 @@ runs:
     - name: Setup chart-testing
       uses: helm/chart-testing-action@v2
       with:
-        version: v3.4.0
+        version: v3.7.1
 
     - name: Update chart-testing configuration with chart dirs
       shell: bash
       run: | 
         $GITHUB_ACTION_PATH/scripts/update-ct-config-with-chart-dirs.sh charts
-
-    - name: Debug
-      shell: bash
-      run: |
-        printenv CT_CONFIG_DIR 
-        ls $CT_CONFIG_DIR 
 
     - name: Build changed Helm charts
       shell: bash
