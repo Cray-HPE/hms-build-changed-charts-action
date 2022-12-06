@@ -58,7 +58,7 @@ else
     # Second identify any charts that have changed between this branch and the target branch
     echo "Using chart testing to determine changed charts" 1>&2
     pwd 1>&2
-    CHANGED_CHARTS=$(ct list-changed --target-branch "$TARGET_BRANCH")
+    CHANGED_CHARTS=$(ct list-changed --config ct.yaml --target-branch "$TARGET_BRANCH")
 fi
 
 echo "Charts to consider: $CHANGED_CHARTS" 1>&2
