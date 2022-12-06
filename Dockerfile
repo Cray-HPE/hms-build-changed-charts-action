@@ -54,7 +54,7 @@ RUN set -eux \
     && chmod +x /usr/local/bin/helm \
     && rm -rv /tmp/helm
 
-ARG CHART_TESTING_VERSION=3.4.0
+ARG CHART_TESTING_VERSION=3.7.1
 RUN set -eux \
     && mkdir /tmp/ct \
     && cd /tmp/ct \
