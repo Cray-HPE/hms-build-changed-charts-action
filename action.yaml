@@ -47,5 +47,7 @@ runs:
 
     - name: Build changed Helm charts
       shell: bash
+      env:
+          UNSTABLE_BUILD_SUFFIX: ${{ inputs.unstable-build-suffix }}
       run: | 
         $GITHUB_ACTION_PATH/scripts/build_changed_charts.sh ./charts ${{ inputs.target-branch }}
