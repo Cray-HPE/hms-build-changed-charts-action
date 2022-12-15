@@ -12,16 +12,6 @@ inputs:
       required: false
       default: ""
 
-# runs:
-#   using: 'docker'
-#   image: 'Dockerfile'
-#   env:
-#       UNSTABLE_BUILD_SUFFIX: ${{ inputs.unstable-build-suffix }}
-#   args:
-#     - /bin/bash
-#     - -c
-#     - git config --global --add safe.directory /github/workspace; update-ct-config-with-chart-dirs.sh charts; build_changed_charts.sh ./charts ${{ inputs.target-branch }}
-
 runs:
   using: composite
   steps:
