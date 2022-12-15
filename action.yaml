@@ -13,11 +13,26 @@ inputs:
       default: ""
 
 runs:
-  using: 'docker'
-  image: 'Dockerfile'
-  env:
-      UNSTABLE_BUILD_SUFFIX: ${{ inputs.unstable-build-suffix }}
-  args:
-    - /bin/bash
-    - -c
-    - git config --global --add safe.directory /github/workspace; update-ct-config-with-chart-dirs.sh charts; build_changed_charts.sh ./charts ${{ inputs.target-branch }}
+  using: composite
+  steps:
+    - name: Setup python
+      uses: actions/setup-python@v4
+      with:
+        python-version: "3.10"
+
+    - name: Setup chart-testing
+      uses: helm/chart-testing-action@v2
+      with:
+        version: v3.7.1
+
+    - name: Update chart-testing configuration with chart dirs
+      shell: bash
+      run: | 
+        $GITHUB_ACTION_PATH/scripts/update-ct-config-with-chart-dirs.sh charts
+
+    - name: Build changed Helm charts
+      shell: bash
+      env:
+          UNSTABLE_BUILD_SUFFIX: ${{ inputs.unstable-build-suffix }}
+      run: | 
+        $GITHUB_ACTION_PATH/scripts/build_changed_charts.sh ./charts ${{ inputs.target-branch }}

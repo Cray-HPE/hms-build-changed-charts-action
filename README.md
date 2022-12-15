@@ -11,7 +11,7 @@
   - [Building HMS Helm charts locally](#building-hms-helm-charts-locally)
 
 ## Overview
-This is a [Docker based Github Action](https://docs.github.com/en/actions/creating-actions/creating-a-docker-container-action) to perform the process of building HMS Helm charts within a HMS Helm chart repository. The container image used by this action is based on the [hms-build-environment](https://github.com/Cray-HPE/hms-build-environment) container image.
+This is a [Composite Github Action](https://docs.github.com/en/actions/creating-actions/creating-a-composite-action) to perform the process of building HMS Helm charts within a HMS Helm chart repository.
 
 This action is composed up by a collection of bash scripts to build and package Helm charts according ot the [HMS Chart Versioning strategy](https://github.com/Cray-HPE/hms-architecture/blob/develop/build/Chart_versioning_rules.md).
 
@@ -29,8 +29,7 @@ Example static ct.yaml file present in a [HMS Chart repo](https://github.com/Cra
 ```yaml
 ---
 chart-dirs: []
-chart-repos:
-  - cray-algol60=https://artifactory.algol60.net/artifactory/csm-helm-charts
+chart-repos: []
 validate-maintainers: false
 check-version-increment: false
 ```
@@ -41,8 +40,7 @@ Assuming the chart repositories contains the chart version directories `charts/v
 chart-dirs:
   - charts/v1.0
   - charts/v2.0
-chart-repos:
-  - cray-algol60=https://artifactory.algol60.net/artifactory/csm-helm-charts
+chart-repos: []
 validate-maintainers: false
 check-version-increment: false
 ```
@@ -68,7 +66,7 @@ UNSTABLE_BUILD_SUFFIX="-20220201202912+1ad88cd"
 ### detect_changed_charts.sh
  
 The detect_changed_charts.sh script is used to determine the list of charts that are candidates for building.
-- For unstable builds the command `ct list-changed --target-branch "$TARGET_BRANCH"` command is used to determine the list of charts that have changed when compared against the target branch (which is typically main). 
+- For unstable builds the command `ct list-changed --config ct.yaml --target-branch "$TARGET_BRANCH"` command is used to determine the list of charts that have changed when compared against the target branch (which is typically main). 
 - For stable builds all charts in the repo are up for consideration for building. 
   > This is kind of a hack, as we don't have an easy way to determine what charts changed so we will put all charts up for consideration. If a chart already has a git tag, then it will not be built!
 
@@ -117,29 +115,29 @@ This action provides no outputs.
 ## Building HMS Helm charts locally
 All of the HMS Chart repositories contain a Makefile to support building Helm charts locally in a similar way to when this Github Action runs, for example the [Makefile in the hms-power-control-charts repository](https://github.com/Cray-HPE/hms-power-control-charts/blob/main/Makefile). 
 
-To enable locally building HMS helm charts the container image that is used by this action must be locally built and tagged. The container image is normally built on demand when this action is ran, so it is not published to artifactory.
+Within a locally checked out HMS Helm chart repo (such as hms-power-control-charts) the following functionality is available: 
+1. Build all charts within the repository:
 
-1.  Build a local copy of the container image used by this action with the tag `hms-build-changed-charts-action:local`:
     ```bash
-    $ make image
+    $ make all-charts
     ```
 
-2.  Now within a locally checked out HMS Helm chart repo (such as hms-power-control-charts) the following functionality is available: 
-    1. Build all charts within the repository:
-       ```bash
-       $ make all-charts
-       ```
-    2. Build all charts that have changed when compared to the main branch:
-       > If the repo was cloned with SSH, then the Docker container performing the build needs those credentials to interact with the locally checked out repo.
-       > This has only been tested on macOS, and may not work on other platforms. When on macOS you may need to run `ssh-add` to add your SSH key to your SSH agent.
-       ```bash
-       $ make changed-charts
-       ```
-    3. Lint all Helm charts in the repository using chart-testing:
-       ```bash
-       $ make lint
-       ``` 
-    4. Clean up modified chart-testing configuration, and remove any packaged Helm chart artifacts.
-       ```bash
-       $ make clean
-       ```
+2. Build all charts that have changed when compared to the main branch:
+
+    > If the repo was cloned with SSH, then the Docker container performing the build needs those credentials to interact with the locally checked out repo.
+    > This has only been tested on macOS, and may not work on other platforms. When on macOS you may need to run `ssh-add` to add your SSH key to your SSH agent.
+    ```bash
+    $ make changed-charts
+    ```
+
+3. Lint all Helm charts in the repository using chart-testing:
+
+    ```bash
+    $ make lint
+    ``` 
+
+4. Clean up modified chart-testing configuration, and remove any packaged Helm chart artifacts.
+
+    ```bash
+    $ make clean
+    ```

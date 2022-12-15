@@ -56,7 +56,8 @@ if [[ "$CURRENT_BRANCH" == "$TARGET_BRANCH" ]]; then
     CHANGED_CHARTS=$(find $CHARTS_BASE -mindepth 2 -maxdepth 2)
 else
     # Second identify any charts that have changed between this branch and the target branch
-    CHANGED_CHARTS=$(ct list-changed --target-branch "$TARGET_BRANCH")
+    echo "Using chart testing to determine changed charts" 1>&2
+    CHANGED_CHARTS=$(ct list-changed --config ct.yaml --target-branch "$TARGET_BRANCH")
 fi
 
 echo "Charts to consider: $CHANGED_CHARTS" 1>&2
