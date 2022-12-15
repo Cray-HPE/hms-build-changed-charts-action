@@ -1,5 +1,6 @@
 name: Build changed Helm charts
 description: Build any Helm charts that have been modified when compared to the master branch
+
 inputs:
   target-branch:
       description: Git repository branch to check against when determining charts that have changed.
