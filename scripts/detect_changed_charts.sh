@@ -70,8 +70,8 @@ for CHART_PATH in $CHANGED_CHARTS; do
         continue
     fi
 
-    CHART_NAME=$(yq e .name "$CHART_YAML_PATH")
-    CHART_VERSION=$(yq e .version "$CHART_YAML_PATH")
+    CHART_NAME=$(yq e --expression .name "$CHART_YAML_PATH")
+    CHART_VERSION=$(yq e --expression .version "$CHART_YAML_PATH")
     EXPECTED_GIT_TAG="$CHART_NAME-$CHART_VERSION"
     EXPECTED_GIT_TAG_EXISTS="false"
 
